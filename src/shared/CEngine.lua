@@ -2,13 +2,13 @@ local CEngine = {
 	Class = {
 		
 	};
-	Service = {
+	Services = {
 		
 	};
-	Controller = {
+	Controllers = {
 		
 	};
-	Module = {
+	Util = {
 		
 	};
 	
@@ -40,16 +40,13 @@ function CEngine:Initalize(module : table)
 	local tab = setmetatable(org, self)
 	
 	
-	local _type = self[org._type]
+	local _type = self[module.Parent.Name] 
+
 	_type[module.Name] = org
+
+	org._type = module.Parent.Name
 	
 	if org._type == "Controller" then
-		org.Shared = nil
-
-		HeartBeat:Wait()
-
-		org.Shared = {}
-
 		for _, v in pairs(Shared:GetChildren()) do
 			org.Shared[v.Name] = require(v)
 		end
