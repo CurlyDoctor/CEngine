@@ -20,18 +20,20 @@ local CEngine = {
 	};
 	
 	Shared = {
-		Promise = require(Shared.Promise);
-		FastWait = require(Shared.FastWait);
-		Maid = require(Shared.FastWait);
-		Signal = require(Shared.Signal);
-		TweenModule = require(Shared.TweenModule);
-		UnGex = require(Shared.UnGex)
+		
 	};
 	
 	Storage = game:GetService("ReplicatedStorage"):WaitForChild("Storage")
 }
 
+for i, v in pairs(Shared:GetChildren()) do
 
+	if v.Name ~= "CEngine" then
+
+		CEngine.Shared[v.Name] = require(v)
+
+	end
+end
 
 
 CEngine.__index = CEngine
