@@ -1,11 +1,14 @@
 {
-  "name": "CEngine",
+  "name": "Fly",
   "tree": {
     "$className": "DataModel",
 
     "ReplicatedStorage": {
       "Shared": {
         "$path": "src/shared"
+      },
+      "Run": {
+        "$path": "src/run"
       }
     },
 

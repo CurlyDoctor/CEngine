@@ -1,3 +1,10 @@
+
+local Remotes = game:GetService("ReplicatedStorage"):WaitForChild("Remotes")
+local StarterPlayerScript = game:GetService("StarterPlayer"):WaitForChild("StarterPlayerScripts")
+local Shared = game:GetService("ReplicatedStorage"):WaitForChild("Shared")
+local HeartBeat = game:GetService("RunService").Heartbeat
+local IsServer = game:GetService("RunService"):IsServer()
+
 local CEngine = {
 	Class = {
 		
@@ -13,22 +20,19 @@ local CEngine = {
 	};
 	
 	Shared = {
-		
-	};
-	
-	OrderTable = {
-
+		Promise = require(Shared.Promise);
+		FastWait = require(Shared.FastWait);
+		Maid = require(Shared.FastWait);
+		Signal = require(Shared.Signal);
+		TweenModule = require(Shared.TweenModule);
+		UnGex = require(Shared.UnGex)
 	};
 	
 	Storage = game:GetService("ReplicatedStorage"):WaitForChild("Storage")
 }
 
 
-local Remotes = game:GetService("ReplicatedStorage"):WaitForChild("Remotes")
-local StarterPlayerScript = game:GetService("StarterPlayer"):WaitForChild("StarterPlayerScripts")
-local Shared = game:GetService("ReplicatedStorage"):WaitForChild("Shared")
-local HeartBeat = game:GetService("RunService").Heartbeat
-local IsServer = game:GetService("RunService"):IsServer()
+
 
 CEngine.__index = CEngine
 
@@ -46,18 +50,8 @@ function CEngine:Initalize(module : table)
 
 	org._type = module.Parent.Name
 	
-	if org._type == "Controller" then
-		for _, v in pairs(Shared:GetChildren()) do
-			org.Shared[v.Name] = require(v)
-		end
-	end
-
-	if type(org.Order) == "number" then
-		table.insert(self.OrderTable, org.Order, org)
-
-	else
-		self.OrderTable[module.name] = org
-	end
+	
+	return org 
 end
 
 function CEngine:ConnectEvent(name: string, func: Function)
