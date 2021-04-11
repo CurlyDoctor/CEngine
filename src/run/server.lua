@@ -19,6 +19,13 @@ for i, v in pairs(ServerStorage:GetDescendants()) do
 end
 
 
+
+for i, v in pairs(ReplicatedStorage.Shared:GetDescendants()) do
+	if v.ClassName == "ModuleScript" and v.Name ~= "CEngine" then
+		local Module = Framework:Initalize(v)
+	end
+end
+
 for i, v in pairs(LightingAPI:GetDescendants()) do
 	if v.ClassName == "ModuleScript" then
 		local Module = Framework:Initalize(v)
@@ -38,4 +45,15 @@ for i, v in pairs(Framework.Services) do
 		v:Start()
 	end)
 end
+
+return nil 
+
+--[[
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+require(ReplicatedStorage.Run.server)
+
+]]--
+
 
