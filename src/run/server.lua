@@ -50,7 +50,7 @@ return nil
 
 --[[
 
-Copy Code Below in a script (Put in game/ServerScriptStorage)
+Copy Code Below in a script (Put in game/ServerScriptService)
 |
 V
 
