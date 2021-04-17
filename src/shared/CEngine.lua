@@ -1,4 +1,3 @@
-
 local Remotes = game:GetService("ReplicatedStorage"):WaitForChild("Remotes")
 local StarterPlayerScript = game:GetService("StarterPlayer"):WaitForChild("StarterPlayerScripts")
 local Shared = game:GetService("ReplicatedStorage"):WaitForChild("Shared")
@@ -26,22 +25,11 @@ local CEngine = {
 	Storage = game:GetService("ReplicatedStorage"):WaitForChild("Storage")
 }
 
-for i, v in pairs(Shared:GetChildren()) do
-
-	if v.Name ~= "CEngine" then
-
-		CEngine.Shared[v.Name] = require(v)
-
-	end
-end
-
 
 CEngine.__index = CEngine
 
-
 function CEngine:Initalize(module : table)
 	local org = require(module)
-	org.Ran = false 
 
 	local tab = setmetatable(org, self)
 	
@@ -92,17 +80,22 @@ function CEngine:RegisterFunction(arg: string)
 			
 		elseif self.Client ~= nil then
 			for i, v in pairs(self.Client) do
-				local RemoteFunction = Instance.new("RemoteFunction")
-				RemoteFunction.Name = i 
-				RemoteFunction.OnServerInvoke = v
-				RemoteFunction.Parent = Remotes
+			
+				if type(v) == "function" then 
+					local RemoteFunction = Instance.new("RemoteFunction")
+					RemoteFunction.Name = i 
+					RemoteFunction.OnServerInvoke = v
+					RemoteFunction.Parent = Remotes
+				end
 			end
 		end
 	elseif self.Server ~= nil then
 		for i, v in pairs(self.Server) do
 			assert(Remotes[i], " RemoteFunction does not exist")
-			local RemoteFunction = Remotes[i]
-			RemoteFunction.OnClientInvoke = v
+			if type(v) == "function" then 
+				local RemoteFunction = Remotes[i]
+				RemoteFunction.OnClientInvoke = v
+			end
 		end
 	end
 end
@@ -151,6 +144,20 @@ function CEngine:FireAllClients(name : string, ...)
 	if Remote then
 
 		Remote:FireAllClients(...)
+
+	end
+end
+
+function CEngine:Yield(func: Function)
+
+	return self.Shared.Promise.new(func)
+end
+
+for i, v in pairs(Shared:GetChildren()) do
+
+	if v.Name ~= "CEngine" then
+
+		CEngine:Initalize(v)
 
 	end
 end

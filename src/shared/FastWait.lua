@@ -2,7 +2,7 @@ local RunService = game:GetService("RunService")
 local threads = {}
 
 local FastWait = {}
-FastWait._type = "Shared"
+
 
 RunService.Stepped:Connect(function ()
 	local now = tick()

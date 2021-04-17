@@ -24,10 +24,9 @@
 -- @see Signal
 
 local Maid = {}
-Maid._type = "Shared"
-Maid.ClassName = "Maid"
+Maid.__index = Maid 
 
-local Promise
+
 
 
 --- Returns a new Maid object
@@ -43,13 +42,7 @@ end
 
 --- Returns Maid[key] if not part of Maid metatable
 -- @return Maid[key] value
-function Maid:__index(index)
-	if (Maid[index]) then
-		return Maid[index]
-	else
-		return self._tasks[index]
-	end
-end
+
 
 
 --- Add a task to clean up
@@ -60,39 +53,19 @@ end
 -- Maid[key] = (Object)           Maids can cleanup objects with a `Destroy` method
 -- Maid[key] = nil                Removes a named task. If the task is an event, it is disconnected. If it is an object,
 --                                it is destroyed.
-function Maid:__newindex(index, newTask)
-	if (Maid[index] ~= nil) then
-		error(("'%s' is reserved"):format(tostring(index)), 2)
-	end
-
-	local tasks = self._tasks
-	local oldTask = tasks[index]
-	tasks[index] = newTask
-
-	if (oldTask) then
-		if (type(oldTask) == "function") then
-			oldTask()
-		elseif (typeof(oldTask) == "RBXScriptConnection") then
-			oldTask:Disconnect()
-		elseif (oldTask.Destroy) then
-			oldTask:Destroy()
-		elseif (Promise.Is(oldTask)) then
-			oldTask:Cancel()
-		end
-	end
-end
 
 
 --- Same as indexing, but uses an incremented number as a key.
 -- @param task An item to clean
 -- @treturn number taskId
 function Maid:GiveTask(task)
+	local Promise = self.Shared.Promise 
 	assert(task, "Task cannot be false or nil")
 
 	local taskId = (#self._tasks + 1)
-	self[taskId] = task
+	self._tasks[taskId] = task
 
-	if (type(task) == "table" and (not task.Destroy) and (not Promise.Is(task))) then
+	if (type(task) == "table" and (not task.Destroy) and (not Promise.is(task))) then
 		warn("[Maid.GiveTask] - Gave table task without .Destroy\n\n" .. debug.traceback())
 	end
 
@@ -101,13 +74,14 @@ end
 
 
 function Maid:GivePromise(promise)
-	assert(Promise.Is(promise), "Expected promise")
-	if (promise:GetStatus() ~= Promise.Status.Started) then
+	local Promise = self.Shared.Promise
+	assert(Promise.is(promise), "Expected promise")
+	if (promise:getStatus() ~= Promise.Status.Started) then
 		return promise
 	end
-	local newPromise = Promise.Resolve(promise)
+	local newPromise = Promise.resolve(promise)
 	local id = self:GiveTask(newPromise)
-	newPromise:Finally(function()
+	newPromise:finally(function()
 		self[id] = nil
 	end)
 	return newPromise
@@ -118,6 +92,7 @@ end
 -- @alias Destroy
 function Maid:DoCleaning()
 	local tasks = self._tasks
+	local Promise = self.Shared.Promise
 
 	-- Disconnect all events first as we know this is safe
 	for index, task in pairs(tasks) do
@@ -137,17 +112,13 @@ function Maid:DoCleaning()
 			task:Disconnect()
 		elseif (task.Destroy) then
 			task:Destroy()
-		elseif (Promise.Is(task)) then
-			task:Cancel()
+		elseif (Promise.is(task)) then
+			task:cancel()
 		end
 		index, task = next(tasks)
 	end
 end
 
-
-function Maid:Init()
-	Promise = self.Shared.Promise
-end
 
 
 --- Alias for DoCleaning()

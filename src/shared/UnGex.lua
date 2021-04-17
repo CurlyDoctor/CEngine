@@ -1,5 +1,5 @@
 local UnGex = {}
-UnGex._type = "Shared"
+
 UnGex.__index = UnGex
 
 
@@ -49,7 +49,7 @@ local InterfaceTypes = {
 
 
 
-function UnGex.CreateElement(Interface)
+function UnGex.createElement(Interface)
     assert(Interface.Class, " Class of Interface has to be defined.")
     assert(Interface.V, "Value has to be defined")
     
@@ -63,6 +63,11 @@ function UnGex.CreateElement(Interface)
 	else
 		newElement = Interface.UI
 	end
+    
+    if Interface.Parent then 
+
+        Interface.Parent.Children[Interface.V.Name] = Interface
+    end
     
 	for index, value in pairs(Interface.V) do
 		newElement[index] = value
@@ -97,31 +102,34 @@ function UnGex:Update()
 end
 
 function UnGex:Destroy()
-    self.UI:Destroy()
+    if self.UI then 
+        self.UI:Destroy()
+    end
+
     
     for i, v in pairs(self.V) do
         self.V[i] = nil
     end
-    
-    for i, v in pairs(self.Children) do
-        self.Children[i] = nil
-    end
 
     self.Class = nil; self.V = nil; self.Children = nil
     
+    for i, v in pairs(self.Children) do
+        self.Children[i]:Destroy()
+    end
 end
 
 function UnGex:Get(gui)
-    local ClonedGui = gui:Clone()
-
-
-    return ClonedGui
+    return gui
 end
 
-function UnGex:Clone()
+function UnGex:Clone(Parent)
     local newInterface = Interface(self)
+
+    newInterface.UI.Parent = Parent 
 
     return newInterface
 end
+
+
 
 return UnGex

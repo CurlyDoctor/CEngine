@@ -1,5 +1,5 @@
 local DoSomethingService = {}
-DoSomethingService._type = "Service"
+
 
 function DoSomethingService:Start()
 

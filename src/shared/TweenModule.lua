@@ -1,5 +1,5 @@
 local TweenModule = {}
-TweenModule._type = "Shared"
+
 TweenModule.__index = TweenModule
 
 local TweenService = game:GetService("TweenService")

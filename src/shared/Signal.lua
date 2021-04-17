@@ -60,7 +60,7 @@ Connection.Destroy = Connection.Disconnect
 --------------------------------------------
 
 local Signal = {}
-Signal._type = "Shared"
+
 Signal.__index = Signal
 
 
