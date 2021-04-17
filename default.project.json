@@ -9,6 +9,12 @@
       },
       "Run": {
         "$path": "src/run"
+      },
+      "Remotes": {
+        "$path": "src/Remotes"
+      },
+      "Storage": {
+        "$path": "src/Storage"
       }
     },
 
