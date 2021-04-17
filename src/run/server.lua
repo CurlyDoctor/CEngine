@@ -50,6 +50,10 @@ return nil
 
 --[[
 
+Copy Code Below in a script (Put in game/ServerScriptStorage)
+|
+V
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 require(ReplicatedStorage.Run.server)
