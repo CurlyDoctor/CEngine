@@ -2,7 +2,7 @@
 -- Author: Quenty
 -- Source: https://github.com/Quenty/NevermoreEngine/blob/version2/Modules/Shared/Events/Maid.lua
 -- License: MIT (https://github.com/Quenty/NevermoreEngine/blob/version2/LICENSE.md)
--- This module has been modified for use in AeroGameFramework
+-- Modified by scripting1st
 
 --[[
 	maid = Maid.new()
@@ -18,10 +18,6 @@
 		> Goes through each task & disconnects events, destroys instances, and calls functions
 --]]
 
----	Manages the cleaning of events and other things.
--- Useful for encapsulating state and make deconstructors easy
--- @classmod Maid
--- @see Signal
 
 local Maid = {}
 Maid.__index = Maid 
