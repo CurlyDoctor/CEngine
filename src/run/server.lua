@@ -9,9 +9,6 @@ local StarterPlayerScripts = game:GetService("StarterPlayer"):WaitForChild("Star
 
 local Promise = require(ReplicatedStorage.Shared.Promise)
 
-
-
-
 for i, v in pairs(ServerStorage:GetDescendants()) do
 	if v.ClassName == "ModuleScript" then
 		Framework:Initalize(v)
@@ -32,32 +29,28 @@ for i, v in pairs(LightingAPI:GetDescendants()) do
 	end
 end
 
-for i, v in pairs(Framework.Services) do 
-	Promise.new(function(resolve)
-		v:Init()
-	end)
-end
+Promise.new(function(resolve)
+	local servicepromises = {}
+	for i, v in pairs(Framework.Services) do 
+		table.insert( servicepromises, #servicepromises + 1, Promise.new(function(resolve) 
+			v:Init()
+			resolve(v)			
+		end))
+	end
 
-
-for i, v in pairs(Framework.Services) do
-	Promise.new(function()
-		
+	resolve(Promise.all(servicepromises))
+end):andThen(function(resolve) 
+	for i, v in pairs(Framework.Services) do
 		v:Start()
-	end)
-end
+	end
+end)
 
 return nil 
 
 --[[
-
 Copy Code Below in a script (Put in game/ServerScriptService)
 |
 V
-
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-
 require(ReplicatedStorage.Run.server)
-
 ]]--
-
-

@@ -16,30 +16,28 @@ for i, v in pairs(StarterPlayerScript:GetDescendants()) do
 end
 
 
-for i, v in pairs(Framework.Controllers) do 
-	Promise.new(function(resolve)
-		v:Init()
-	end)
-end
+Promise.new(function(resolve)
+	local servicepromises = {}
+	for i, v in pairs(Framework.Controllers) do 
+		table.insert(servicepromises, #servicepromises + 1, Promise.new(function(resolve) 
+			v:Init()
+			resolve(v)			
+		end))
+	end
 
-
-for i, v in pairs(Framework.Controllers) do
-	Promise.new(function()
-
+	resolve(Promise.all(servicepromises))
+end):andThen(function(resolve) 
+	for i, v in pairs(Framework.Controllers) do
 		v:Start()
-	end)
-end
+	end
+end)
 
 return nil 
 
 --[[
-
 Copy Code Below in a local script (Put in game/StarterPlayer/StarterPlayerScripts)
 |
 V
-
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-
 require(ReplicatedStorage.Run.client)
-
 ]]--
