@@ -23,6 +23,12 @@
         "$path": "src/server"
       }
     },
+    
+    "ServerScriptService": {
+      "Internal": {
+        "$path": "ServerInternal"
+      }
+    },
 
     "StarterPlayer": {
       "StarterPlayerScripts": {
