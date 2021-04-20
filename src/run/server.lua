@@ -47,10 +47,3 @@ end)
 
 return nil 
 
---[[
-Copy Code Below in a script (Put in game/ServerScriptService)
-|
-V
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-require(ReplicatedStorage.Run.server)
-]]--
