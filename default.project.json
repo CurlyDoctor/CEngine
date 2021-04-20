@@ -34,6 +34,9 @@
       "StarterPlayerScripts": {
         "Client": {
           "$path": "src/client"
+        },
+        "Internal": {
+          "$path": "ClientInternal"
         }
       }
     },
