@@ -12,9 +12,6 @@
       },
       "Remotes": {
         "$path": "src/Remotes"
-      },
-      "Storage": {
-        "$path": "src/Storage"
       }
     },
 

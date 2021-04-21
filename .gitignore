@@ -1,6 +1,4 @@
-# Project place file
-/CEngine.rbxlx
-
-# Roblox Studio lock files
-/*.rbxlx.lock
-/*.rbxl.lock
+# Ignore everything in this directory
+*
+# Except this file
+!.gitignore
