@@ -21,8 +21,7 @@ local CEngine = {
 	Shared = {
 		
 	};
-	
-	Storage = game:GetService("ReplicatedStorage"):WaitForChild("Storage")
+
 }
 
 
@@ -40,6 +39,9 @@ function CEngine:Initalize(module : table)
 
 	org._type = module.Parent.Name
 	
+	if IsServer then 
+		org.assets = game:GetService("ServerScriptService").Assets
+	end
 	
 	return org 
 end
