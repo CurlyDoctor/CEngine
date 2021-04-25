@@ -24,9 +24,6 @@
     "ServerScriptService": {
       "Internal": {
         "$path": "ServerInternal"
-      },
-      "Assets": {
-        "$path": "src/assets"
       }
     },
 
